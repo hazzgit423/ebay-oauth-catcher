@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>eBay OAuth code</title>
+<style>
+  body { background:#12100D; color:#EDEAE2; font-family:ui-monospace,Menlo,monospace;
+         max-width:640px; margin:60px auto; padding:0 20px; line-height:1.6; }
+  h1 { font-size:1.2rem; color:#F2994A; }
+  #code { background:#1E1B16; border:1px solid #3A342A; border-radius:8px; padding:16px;
+          word-break:break-all; font-size:0.95rem; margin:16px 0; user-select:all; }
+  button { background:#F2994A; border:0; border-radius:6px; padding:10px 16px; font-weight:600;
+           cursor:pointer; font-size:0.9rem; }
+  #msg { color:#ABA79A; font-size:0.85rem; }
+</style>
+</head>
+<body>
+  <h1>eBay sent this back:</h1>
+  <div id="code">(reading the URL…)</div>
+  <button onclick="copyIt()">Copy code</button>
+  <p id="msg"></p>
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const code = params.get('code');
+    const err = params.get('error');
+    const el = document.getElementById('code');
+    if (code) {
+      el.textContent = code;
+    } else if (err) {
+      el.textContent = 'No code — eBay returned an error: ' + err;
+    } else {
+      el.textContent = 'No "code" parameter found in this URL.';
+    }
+    function copyIt() {
+      navigator.clipboard.writeText(code || '').then(
+        () => { document.getElementById('msg').textContent = 'Copied.'; },
+        () => { document.getElementById('msg').textContent = 'Copy failed — select the text above and copy manually.'; }
+      );
+    }
+  </script>
+</body>
+</html>
